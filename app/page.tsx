@@ -462,8 +462,11 @@ export default function Page() {
             </h2>
           </Reveal>
           <div className="max-w-[1160px] mx-auto grid md:grid-cols-3 gap-10 mt-12 text-center">
-            {STEPS.map((s) => (
+            {STEPS.map((s) => ( 
               <Reveal key={s.n}>
+                <div className="w-full h-48 mb-4 overflow-hidden rounded-2xl">
+                 <img src={s.n === "01" ? "/images/step-wet.jpg" : s.n === "02" ? "/images/step-massage.jpg" : "/images/step-rinse.jpg } alt={s.n} className="w-full h-full object-cover"  />
+              </div>
                 <div className="w-[110px] h-[110px] mx-auto mb-5 rounded-full border border-dashed border-[#A8B89A] grid place-items-center text-[#4F7A45]" />
                 <div className="font-[family-name:var(--font-serif)] font-semibold text-[#8A6A4A] tracking-widest mb-1">
                   {s.n}
