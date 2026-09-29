@@ -553,7 +553,6 @@ export default function Page() {
           <form
             action="https://api.web3forms.com/submit"
             method="POST"
-            onSubmit={onSubmit}
             className="bg-[#FFFDF8] border border-[#244D2B]/10 rounded-[26px] p-10 max-w-[820px] mx-auto mt-11 shadow-xl"
           >
             {!orderDone ? ( 
@@ -702,11 +701,11 @@ export default function Page() {
               <ul className="list-none p-0 m-0 mb-5">
                 {[
                   "📞 Phone: +92 XXX XXXXXXX",
-                  "📧 Email: hello@herbelle.example",
+                  "📧 Email: herbelleofficial01@gmail.com",
                   "📍 Location: Pakistan",
-                  "📱 Instagram: @herbelle",
-                  "📱 Facebook: /herbelle",
-                  "📱 TikTok: @herbelle",
+                  "📱 Instagram: @herbelleofficial_01",
+                
+                  
                 ].map((line) => (
                   <li key={line} className="py-2 border-b border-[#244D2B]/10">
                     {line}
