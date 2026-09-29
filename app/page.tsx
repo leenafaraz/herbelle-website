@@ -41,15 +41,29 @@ const FAQS = [
   { q: "How often can I use the shampoo?", a: "It is designed for everyday hair-care routines. Use as often as suits your hair and preferences." },
   { q: "What hair types is it intended for?", a: "HERBELLE is intended for everyday use. If you have a sensitive scalp or allergies, check the label and patch-test first." },
   { q: "How should I store the shampoo?", a: "Keep the bottle tightly closed, in a cool, dry place away from direct sunlight." },
-  { q: "How can I place an order?", a: "Add the shampoo to your cart or use the Place Your Order form on this page. We'll contact you to confirm." },
-  { q: "Do you offer Cash on Delivery?", a: "Payment options are confirmed when we contact you about your order. [Update once final payment methods are set.]" },
+  { q: "How can I place an order?", a: "Add the shampoo to your cart, or tap \"Order via WhatsApp\" to send us your order directly." },
+  { q: "Do you offer Cash on Delivery?", a: "Payment options are confirmed when we reply to your WhatsApp order. [Update once final payment methods are set.]" },
   { q: "How long does delivery take?", a: "Delivery time depends on your city. We'll share an estimate when we confirm your order. [Update with final timelines.]" },
 ];
 
 const PRODUCT_NAME = "HERBELLE Organic Herbal Shampoo";
-const PRICE = 599; // set a real price to show totals instead of "Rs. 599"
+const PRICE = 0; // set a real price to show totals instead of "Rs. XXX"
+const WHATSAPP_NUMBER = "923379378174";
 
-const money = (n: number) => (PRICE ? `Rs. ${(n * PRICE).toLocaleString()}` : "Rs. 599");
+const money = (n: number) => (PRICE ? `Rs. ${(n * PRICE).toLocaleString()}` : "Rs. XXX");
+
+function buildWhatsAppMessage(cart: number) {
+  const qty = cart > 0 ? cart : 1;
+  const items = `${qty} × ${PRODUCT_NAME}`;
+  const total = PRICE ? money(qty) : "Rs. XXX (price to be confirmed)";
+  return encodeURIComponent(
+    `Hello HERBELLE! I'd like to place an order:\n\n${items}\nTotal: ${total}\n\nPlease confirm my order and delivery details.`
+  );
+}
+
+function whatsappLink(cart: number) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${buildWhatsAppMessage(cart)}`;
+}
 
 /* ---------- small reusable bits ---------- */
 
@@ -103,36 +117,9 @@ export default function Page() {
   const [galleryIdx, setGalleryIdx] = useState(0);
   const gallery = ["/images/product-front.jpg", "/images/product-back.jpg", "/images/lifestyle.jpg"];
 
-  const [order, setOrder] = useState({ name: "", phone: "", email: "", city: "", address: "", quantity: 1, notes: "" });
-  const [orderErrors, setOrderErrors] = useState<Errors>({});
-  const [orderDone, setOrderDone] = useState<string | null>(null);
-
   const [contact, setContact] = useState({ name: "", email: "", message: "" });
   const [contactErrors, setContactErrors] = useState<Errors>({});
   const [contactDone, setContactDone] = useState(false);
-
-  useEffect(() => {
-    setOrder((o) => ({ ...o, quantity: cart || 1 }));
-  }, [cart]);
-
-  function validateOrder() {
-    const e: Errors = {};
-    if (order.name.trim().length < 3) e.name = "Enter your full name.";
-    if (!/^[+\d][\d\s-]{8,14}$/.test(order.phone.trim())) e.phone = "Enter a valid phone number.";
-    if (order.email && !/^\S+@\S+\.\S+$/.test(order.email.trim())) e.email = "Enter a valid email address.";
-    if (!order.city.trim()) e.city = "Enter your city.";
-    if (order.address.trim().length < 8) e.address = "Enter your complete address.";
-    if (order.quantity < 1 || order.quantity > 20) e.quantity = "Quantity must be 1–20.";
-    setOrderErrors(e);
-    return Object.keys(e).length === 0;
-  }
-
-  function submitOrder(e: React.FormEvent) {
-    e.preventDefault();
-    if (!validateOrder()) return;
-    setOrderDone(`Request: ${order.quantity} × ${PRODUCT_NAME} for ${order.name.trim()}, ${order.city.trim()}.`);
-    setCart(0);
-  }
 
   function validateContact() {
     const e: Errors = {};
@@ -205,7 +192,9 @@ export default function Page() {
               </span>
             </button>
             <a
-              href="#order"
+              href={whatsappLink(cart)}
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden md:inline-flex min-h-[48px] items-center px-7 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#244D2B] text-[#F8F3E8] hover:bg-[#4F7A45] transition"
             >
               Order now
@@ -410,8 +399,9 @@ export default function Page() {
                   Add to cart
                 </button>
                 <a
-                  href="#order"
-                  onClick={() => setCart(qty)}
+                  href={whatsappLink(qty)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="min-h-[48px] inline-flex items-center px-7 rounded-full text-xs font-semibold tracking-widest uppercase border border-[#244D2B] text-[#244D2B] transition"
                 >
                   Buy now
@@ -462,11 +452,8 @@ export default function Page() {
             </h2>
           </Reveal>
           <div className="max-w-[1160px] mx-auto grid md:grid-cols-3 gap-10 mt-12 text-center">
-            {STEPS.map((s) => ( 
+            {STEPS.map((s) => (
               <Reveal key={s.n}>
-                <div className="w-full h-48 mb-4 overflow-hidden rounded-2xl">
-                 <img src={s.n === "01" ? "/images/step-wet.jpg" : s.n === "02" ? "/images/step-massage.jpg" : "/images/step-rinse.jpg } alt={s.n} className="w-full h-full object-cover"  />
-              </div>
                 <div className="w-[110px] h-[110px] mx-auto mb-5 rounded-full border border-dashed border-[#A8B89A] grid place-items-center text-[#4F7A45]" />
                 <div className="font-[family-name:var(--font-serif)] font-semibold text-[#8A6A4A] tracking-widest mb-1">
                   {s.n}
@@ -536,7 +523,7 @@ export default function Page() {
           </Reveal>
         </section>
 
-        {/* order form */}
+        {/* order via WhatsApp */}
         <section id="order" className="py-24 px-6">
           <Reveal className="max-w-[1160px] mx-auto text-center">
             <span className="block text-xs tracking-[0.22em] font-semibold text-[#4F7A45] uppercase mb-3.5">
@@ -546,133 +533,33 @@ export default function Page() {
               Place Your Order
             </h2>
             <p className="max-w-[560px] mx-auto">
-              Fill in your details and we&rsquo;ll get your HERBELLE order ready.
+              Send us your order details on WhatsApp and we&rsquo;ll get it ready for you.
             </p>
           </Reveal>
 
-          <form
-            action="https://api.web3forms.com/submit"
-            method="POST"
-            className="bg-[#FFFDF8] border border-[#244D2B]/10 rounded-[26px] p-10 max-w-[820px] mx-auto mt-11 shadow-xl"
-          >
-            {!orderDone ? ( 
-              <div>
-                {/* Web3Forms Configuration */}
-                <input type="hidden" name="access_key" value="9c1a1954-a1cd-46ed-b3ea-cefc21af8e3a" />
-                <input type="hidden" name="subject" value="New Herbelle Order Received!" />
-                <div className="bg-[#F8F3E8] rounded-xl px-4 py-3 text-sm mb-4">
-                  {cart ? `In your bag: ${cart} × ${PRODUCT_NAME}` : "Choose quantity below to request your order."}
-                </div>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <Field label="Full Name" error={orderErrors.name}>
-                    <input
-                      className="input"
-                      autoComplete="name"
-                      value={order.name}
-                      onChange={(e) => setOrder({ ...order, name: e.target.value })}
-                    />
-                  </Field>
-                  <Field label="Phone Number" error={orderErrors.phone}>
-                    <input
-                      type="tel"
-                      className="input"
-                      autoComplete="tel"
-                      placeholder="03XX XXXXXXX"
-                      value={order.phone}
-                      onChange={(e) => setOrder({ ...order, phone: e.target.value })}
-                    />
-                  </Field>
-                  <Field label="Email Address" error={orderErrors.email}>
-                    <input
-                      type="email"
-                      className="input"
-                      autoComplete="email"
-                      value={order.email}
-                      onChange={(e) => setOrder({ ...order, email: e.target.value })}
-                    />
-                  </Field>
-                  <Field label="City" error={orderErrors.city}>
-                    <input
-                      className="input"
-                      autoComplete="address-level2"
-                      value={order.city}
-                      onChange={(e) => setOrder({ ...order, city: e.target.value })}
-                    />
-                  </Field>
-                  <Field label="Complete Address" full error={orderErrors.address}>
-                    <textarea
-                      className="input"
-                      rows={2}
-                      autoComplete="street-address"
-                      value={order.address}
-                      onChange={(e) => setOrder({ ...order, address: e.target.value })}
-                    />
-                  </Field>
-                  <Field label="Product">
-                    <select className="input" defaultValue="0">
-                      <option value="0">HERBELLE Organic Herbal Shampoo — 250 ML</option>
-                    </select>
-                  </Field>
-                  <Field label="Quantity" error={orderErrors.quantity}>
-                    <input
-                      type="number"
-                      min={1}
-                      max={20}
-                      className="input"
-                      value={order.quantity}
-                      onChange={(e) => setOrder({ ...order, quantity: +e.target.value })}
-                    />
-                  </Field>
-                  <Field label="Additional Notes" full>
-                    <textarea
-                      className="input"
-                      rows={2}
-                      value={order.notes}
-                      onChange={(e) => setOrder({ ...order, notes: e.target.value })}
-                    />
-                  </Field>
-                  <div className="md:col-span-2">
-                    <button
-                      type="submit"
-                      className="w-full min-h-[48px] rounded-full text-xs font-semibold tracking-widest uppercase bg-[#244D2B] text-[#F8F3E8] hover:bg-[#4F7A45] transition"
-                    >
-                      Place order
-                    <a
-                      href="https://wa.me/923379378174?text=Hello%20Herbelle,%20I%20want%20to%20place%20an%20order%20for%20Herbelle%20Shampoo."
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full min-h-[48px] bg-[#244D2B] text-white rounded-full flex items-center justify-center text-xs font-semibold tracking-widest uppercase hover:opacity-90 transition-opacity"
-                    >
-                      Place order via WhatsApp
-                    </a>
-                  </button>
-                    <p className="text-xs text-[#8A6A4A] text-center mt-3">
-                      This is an order request. No payment is taken online — we&rsquo;ll confirm details and payment
-                      method with you.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-8 px-2">
-                <h3 className="font-[family-name:var(--font-serif)] text-3xl font-semibold text-[#244D2B] mb-3">
-                  Thank you for choosing HERBELLE! 🌿
-                </h3>
-                <p>Your order request has been received. We&rsquo;ll contact you shortly to confirm your order.</p>
-                <p className="text-xs text-[#8A6A4A] mb-5">{orderDone}</p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOrderDone(null);
-                    setOrder({ name: "", phone: "", email: "", city: "", address: "", quantity: 1, notes: "" });
-                  }}
-                  className="min-h-[48px] inline-flex items-center px-7 rounded-full text-xs font-semibold tracking-widest uppercase border border-[#244D2B] text-[#244D2B]"
-                >
-                  Place another request
-                </button>
-              </div>
+          <div className="bg-[#FFFDF8] border border-[#244D2B]/10 rounded-[26px] p-10 max-w-[600px] mx-auto mt-11 shadow-xl text-center">
+            <p className="mb-6">
+              Tap the button below to open WhatsApp with your order pre-filled — just confirm your name, address and
+              quantity and send it across.
+            </p>
+            <a
+              href={whatsappLink(cart)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-[48px] items-center gap-2 px-8 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#25D366] text-white hover:opacity-90 transition"
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+                <path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.1-1.4-.1-.1-.3-.2-.6-.3z" />
+                <path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.1L2 22l5.1-1.3C8.5 21.5 10.2 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.3.9.9-3.2-.2-.3C3.9 14.7 3.5 13.4 3.5 12c0-4.7 3.8-8.5 8.5-8.5s8.5 3.8 8.5 8.5-3.8 8.5-8.5 8.5z" />
+              </svg>
+              Order via WhatsApp
+            </a>
+            {cart > 0 && (
+              <p className="text-xs text-[#8A6A4A] mt-4">
+                Your message will include: {cart} × {PRODUCT_NAME}
+              </p>
             )}
-          </form>
+          </div>
         </section>
 
         {/* FAQ */}
@@ -708,12 +595,12 @@ export default function Page() {
               </h2>
               <ul className="list-none p-0 m-0 mb-5">
                 {[
-                  "📞 Phone: +92 XXX XXXXXXX",
-                  "📧 Email: herbelleofficial01@gmail.com",
+                  `📞 Phone: +${WHATSAPP_NUMBER}`,
+                  "📧 Email: hello@herbelle.example",
                   "📍 Location: Pakistan",
-                  "📱 Instagram: @herbelleofficial_01",
-                
-                  
+                  "📱 Instagram: @herbelle",
+                  "📱 Facebook: /herbelle",
+                  "📱 TikTok: @herbelle",
                 ].map((line) => (
                   <li key={line} className="py-2 border-b border-[#244D2B]/10">
                     {line}
@@ -788,7 +675,9 @@ export default function Page() {
               </a>
             ))}
             <a
-              href="#order"
+              href={whatsappLink(cart)}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex mt-3 min-h-[44px] items-center px-6 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F8F3E8] text-[#244D2B]"
             >
               Order now
@@ -854,16 +743,18 @@ export default function Page() {
           <div>
             <p className="flex justify-between font-semibold">
               <span>Total</span>
-              <span>{PRICE ? money(cart) : `Rs. 599 × ${cart}`}</span>
+              <span>{PRICE ? money(cart) : `Rs. XXX × ${cart}`}</span>
             </p>
             <a
-              href="#order"
+              href={whatsappLink(cart)}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setCartOpen(false)}
-              className="block text-center w-full min-h-[48px] leading-[48px] rounded-full text-xs font-semibold tracking-widest uppercase bg-[#244D2B] text-[#F8F3E8]"
+              className="block text-center w-full min-h-[48px] leading-[48px] rounded-full text-xs font-semibold tracking-widest uppercase bg-[#25D366] text-white hover:opacity-90 transition"
             >
-              Checkout
+              Order via WhatsApp
             </a>
-            <p className="text-xs text-[#8A6A4A] text-center mt-2.5">Order request — no online payment.</p>
+            <p className="text-xs text-[#8A6A4A] text-center mt-2.5">You&rsquo;ll be redirected to WhatsApp to confirm.</p>
           </div>
         )}
       </aside>
