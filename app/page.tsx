@@ -47,15 +47,15 @@ const FAQS = [
 ];
 
 const PRODUCT_NAME = "HERBELLE Organic Herbal Shampoo";
-const PRICE = 0; // set a real price to show totals instead of "Rs. XXX"
+const PRICE = 599; // set a real price to show totals instead of "Rs. 599"
 const WHATSAPP_NUMBER = "923379378174";
 
-const money = (n: number) => (PRICE ? `Rs. ${(n * PRICE).toLocaleString()}` : "Rs. XXX");
+const money = (n: number) => (PRICE ? `Rs. ${(n * PRICE).toLocaleString()}` : "Rs. 599");
 
 function buildWhatsAppMessage(cart: number) {
   const qty = cart > 0 ? cart : 1;
   const items = `${qty} × ${PRODUCT_NAME}`;
-  const total = PRICE ? money(qty) : "Rs. XXX (price to be confirmed)";
+  const total = PRICE ? money(qty) : "Rs. 599 (price to be confirmed)";
   return encodeURIComponent(
     `Hello HERBELLE! I'd like to place an order:\n\n${items}\nTotal: ${total}\n\nPlease confirm my order and delivery details.`
   );
@@ -751,7 +751,7 @@ export default function Page() {
           <div>
             <p className="flex justify-between font-semibold">
               <span>Total</span>
-              <span>{PRICE ? money(cart) : `Rs. XXX × ${cart}`}</span>
+              <span>{PRICE ? money(cart) : `Rs. 599 × ${cart}`}</span>
             </p>
             <a
               href={whatsappLink(cart)}
