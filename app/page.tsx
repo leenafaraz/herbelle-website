@@ -637,7 +637,15 @@ export default function Page() {
                       className="w-full min-h-[48px] rounded-full text-xs font-semibold tracking-widest uppercase bg-[#244D2B] text-[#F8F3E8] hover:bg-[#4F7A45] transition"
                     >
                       Place order
-                    </button>
+                    <a
+                      href="https://wa.me/923379378174?text=Hello%20Herbelle,%20I%20want%20to%20place%20an%20order%20for%20Herbelle%20Shampoo."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full min-h-[48px] bg-[#244D2B] text-white rounded-full flex items-center justify-center text-xs font-semibold tracking-widest uppercase hover:opacity-90 transition-opacity"
+                    >
+                      Place order via WhatsApp
+                    </a>
+                  </button>
                     <p className="text-xs text-[#8A6A4A] text-center mt-3">
                       This is an order request. No payment is taken online — we&rsquo;ll confirm details and payment
                       method with you.
