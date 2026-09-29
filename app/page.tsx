@@ -551,11 +551,16 @@ export default function Page() {
           </Reveal>
 
           <form
-            onSubmit={submitOrder}
+            action="https://api.web3forms.com/submit"
+            method="POST"
+            onSubmit={onSubmit}
             className="bg-[#FFFDF8] border border-[#244D2B]/10 rounded-[26px] p-10 max-w-[820px] mx-auto mt-11 shadow-xl"
           >
-            {!orderDone ? (
+            {!orderDone ? ( 
               <div>
+                {/* Web3Forms Configuration */}
+                <input type="hidden" name="access_key" value="9c1a1954-a1cd-46ed-b3ea-cefc21af8e3a" />
+                <input type="hidden" name="subject" value="New Herbelle Order Received!" />
                 <div className="bg-[#F8F3E8] rounded-xl px-4 py-3 text-sm mb-4">
                   {cart ? `In your bag: ${cart} × ${PRODUCT_NAME}` : "Choose quantity below to request your order."}
                 </div>
