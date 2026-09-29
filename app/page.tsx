@@ -441,27 +441,35 @@ export default function Page() {
           </div>
         </section>
 
-        {/* how to use */}
-        <section className="py-24 px-6 bg-[#FFFDF8]">
-          <Reveal className="max-w-[1160px] mx-auto text-center">
-            <span className="block text-xs tracking-[0.22em] font-semibold text-[#4F7A45] uppercase mb-3.5">
-              How to use
-            </span>
-            <h2 className="font-[family-name:var(--font-serif)] font-semibold text-[clamp(2rem,4vw,3.2rem)] text-[#244D2B]">
-              Three simple steps
-            </h2>
-          </Reveal>
-          <div className="max-w-[1160px] mx-auto grid md:grid-cols-3 gap-10 mt-12 text-center">
-            {STEPS.map((s) => (
-              <Reveal key={s.n}>
-                <div className="w-[110px] h-[110px] mx-auto mb-5 rounded-full border border-dashed border-[#A8B89A] grid place-items-center text-[#4F7A45]" />
-                <div className="font-[family-name:var(--font-serif)] font-semibold text-[#8A6A4A] tracking-widest mb-1">
-                  {s.n}
-                </div>
-                <p>{s.copy}</p>
-              </Reveal>
-            ))}
-          </div>
+        const STEPS = [
+  { n: "01 — WET", copy: "Thoroughly wet your hair.", img: "/images/step-wet.jpg" },
+  { n: "02 — MASSAGE", copy: "Apply a suitable amount and gently massage into the scalp and hair.", img: "/images/step-massage.jpg" },
+  { n: "03 — RINSE", copy: "Rinse thoroughly and repeat if desired.", img: "/images/step-rinse.jpg" },
+];
+{/* how to use */}
+<section className="py-24 px-6 bg-[#FFFDF8]">
+  <Reveal className="max-w-[1160px] mx-auto text-center">
+    <span className="block text-xs tracking-[0.22em] font-semibold text-[#4F7A45] uppercase mb-3.5">
+      How to use
+    </span>
+    <h2 className="font-[family-name:var(--font-serif)] font-semibold text-[clamp(2rem,4vw,3.2rem)] text-[#244D2B]">
+      Three simple steps
+    </h2>
+  </Reveal>
+  <div className="max-w-[1160px] mx-auto grid md:grid-cols-3 gap-10 mt-12 text-center">
+    {STEPS.map((s) => (
+      <Reveal key={s.n}>
+        <div className="relative w-[130px] h-[130px] mx-auto mb-5 rounded-full overflow-hidden border-2 border-[#A8B89A] shadow-md">
+          <Image src={s.img} alt={s.n} fill className="object-cover" sizes="130px" />
+        </div>
+        <div className="font-[family-name:var(--font-serif)] font-semibold text-[#8A6A4A] tracking-widest mb-1">
+          {s.n}
+        </div>
+        <p>{s.copy}</p>
+      </Reveal>
+    ))}
+  </div>
+</section>
         </section>
 
         {/* reviews */}
