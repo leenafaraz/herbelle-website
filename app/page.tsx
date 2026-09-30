@@ -13,6 +13,9 @@ const INGREDIENTS = [
   { name: "Rosemary", img: "/images/ingredient-rosemary.jpg", copy: "A refreshing botanical ingredient traditionally associated with hair-care rituals." },
   { name: "Amla", img: "/images/ingredient-amla.jpg", copy: "A traditional South Asian herbal ingredient used in natural hair-care routines." },
   { name: "Shikakai", img: "/images/ingredient-shikakai.jpg", copy: "A classic botanical cleansing ingredient traditionally used for hair care." },
+  { name: "Methi Seeds", img: "/images/ingredient-methiSeeds.jpg", copy: "A traditional herbal seed known for its nourishing, conditioning qualities." },
+  { name: "Neem", img: "/images/ingredient-neem.jpg", copy: "A time-honored botanical valued for its purifying, refreshing properties." },
+  { name: "Reetha", img: "/images/ingredient-reetha.jpg", copy: "A gentle, naturally derived cleansing ingredient used in traditional hair care." },
 ];
 
 const BENEFITS = [
@@ -37,7 +40,7 @@ const REVIEWS = [
 
 const FAQS = [
   { q: "What is HERBELLE Organic Herbal Shampoo?", a: "A botanical-inspired shampoo made for a fresh, simple, everyday hair-care ritual." },
-  { q: "What ingredients are used?", a: "Botanical ingredients inspired by traditional herbal hair care, including aloe vera, rosemary, amla and shikakai. Please refer to the bottle label for the full ingredient list." },
+  { q: "What ingredients are used?", a: "Botanical ingredients inspired by traditional herbal hair care, including aloe vera, rosemary, amla, shikakai, methi seeds, neem and reetha. Please refer to the bottle label for the full ingredient list." },
   { q: "How often can I use the shampoo?", a: "It is designed for everyday hair-care routines. Use as often as suits your hair and preferences." },
   { q: "What hair types is it intended for?", a: "HERBELLE is intended for everyday use. If you have a sensitive scalp or allergies, check the label and patch-test first." },
   { q: "How should I store the shampoo?", a: "Keep the bottle tightly closed, in a cool, dry place away from direct sunlight." },
@@ -315,7 +318,7 @@ export default function Page() {
               Carefully selected botanical ingredients inspired by traditional herbal hair care.
             </p>
           </Reveal>
-          <div className="max-w-[1160px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-5 mt-12">
+          <div className="max-w-[1160px] mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-12">
             {INGREDIENTS.map((ing) => (
               <Reveal key={ing.name}>
                 <div className="bg-[#FFFDF8] rounded-[22px] p-3.5 pb-6 shadow-md border border-[#244D2B]/10 hover:-translate-y-1.5 hover:shadow-xl transition">
