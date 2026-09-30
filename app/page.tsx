@@ -23,9 +23,9 @@ const BENEFITS = [
 ];
 
 const STEPS = [
-  { n: "01 — WET", copy: "Thoroughly wet your hair." },
-  { n: "02 — MASSAGE", copy: "Apply a suitable amount and gently massage into the scalp and hair." },
-  { n: "03 — RINSE", copy: "Rinse thoroughly and repeat if desired." },
+  { n: "01 — WET", copy: "Thoroughly wet your hair.", img: "/images/step-wet.jpg" },
+  { n: "02 — MASSAGE", copy: "Apply a suitable amount and gently massage into the scalp and hair.", img: "/images/step-massage.jpg" },
+  { n: "03 — RINSE", copy: "Rinse thoroughly and repeat if desired.", img: "/images/step-rinse.jpg" },
 ];
 
 const REVIEWS = [
@@ -47,15 +47,15 @@ const FAQS = [
 ];
 
 const PRODUCT_NAME = "HERBELLE Organic Herbal Shampoo";
-const PRICE = 599; // set a real price to show totals instead of "Rs. 599"
+const PRICE = 599;
 const WHATSAPP_NUMBER = "923379378174";
 
-const money = (n: number) => (PRICE ? `Rs. ${(n * PRICE).toLocaleString()}` : "Rs. 599");
+const money = (n: number) => (PRICE ? `Rs. ${(n * PRICE).toLocaleString()}` : "Rs. XXX");
 
 function buildWhatsAppMessage(cart: number) {
   const qty = cart > 0 ? cart : 1;
   const items = `${qty} × ${PRODUCT_NAME}`;
-  const total = PRICE ? money(qty) : "Rs. 599 (price to be confirmed)";
+  const total = PRICE ? money(qty) : "Rs. XXX (price to be confirmed)";
   return encodeURIComponent(
     `Hello HERBELLE! I'd like to place an order:\n\n${items}\nTotal: ${total}\n\nPlease confirm my order and delivery details.`
   );
@@ -441,35 +441,29 @@ export default function Page() {
           </div>
         </section>
 
-        const STEPS = [
-  { n: "01 — WET", copy: "Thoroughly wet your hair.", img: "/images/step-wet.jpg" },
-  { n: "02 — MASSAGE", copy: "Apply a suitable amount and gently massage into the scalp and hair.", img: "/images/step-massage.jpg" },
-  { n: "03 — RINSE", copy: "Rinse thoroughly and repeat if desired.", img: "/images/step-rinse.jpg" },
-];
-{/* how to use */}
-<section className="py-24 px-6 bg-[#FFFDF8]">
-  <Reveal className="max-w-[1160px] mx-auto text-center">
-    <span className="block text-xs tracking-[0.22em] font-semibold text-[#4F7A45] uppercase mb-3.5">
-      How to use
-    </span>
-    <h2 className="font-[family-name:var(--font-serif)] font-semibold text-[clamp(2rem,4vw,3.2rem)] text-[#244D2B]">
-      Three simple steps
-    </h2>
-  </Reveal>
-  <div className="max-w-[1160px] mx-auto grid md:grid-cols-3 gap-10 mt-12 text-center">
-    {STEPS.map((s) => (
-      <Reveal key={s.n}>
-        <div className="relative w-[130px] h-[130px] mx-auto mb-5 rounded-full overflow-hidden border-2 border-[#A8B89A] shadow-md">
-          <Image src={s.img} alt={s.n} fill className="object-cover" sizes="130px" />
-        </div>
-        <div className="font-[family-name:var(--font-serif)] font-semibold text-[#8A6A4A] tracking-widest mb-1">
-          {s.n}
-        </div>
-        <p>{s.copy}</p>
-      </Reveal>
-    ))}
-  </div>
-</section>
+        {/* how to use */}
+        <section className="py-24 px-6 bg-[#FFFDF8]">
+          <Reveal className="max-w-[1160px] mx-auto text-center">
+            <span className="block text-xs tracking-[0.22em] font-semibold text-[#4F7A45] uppercase mb-3.5">
+              How to use
+            </span>
+            <h2 className="font-[family-name:var(--font-serif)] font-semibold text-[clamp(2rem,4vw,3.2rem)] text-[#244D2B]">
+              Three simple steps
+            </h2>
+          </Reveal>
+          <div className="max-w-[1160px] mx-auto grid md:grid-cols-3 gap-10 mt-12 text-center">
+            {STEPS.map((s) => (
+              <Reveal key={s.n}>
+                <div className="relative w-[130px] h-[130px] mx-auto mb-5 rounded-full overflow-hidden border-2 border-[#A8B89A] shadow-md">
+                  <Image src={s.img} alt={s.n} fill className="object-cover" sizes="130px" />
+                </div>
+                <div className="font-[family-name:var(--font-serif)] font-semibold text-[#8A6A4A] tracking-widest mb-1">
+                  {s.n}
+                </div>
+                <p>{s.copy}</p>
+              </Reveal>
+            ))}
+          </div>
         </section>
 
         {/* reviews */}
@@ -751,7 +745,7 @@ export default function Page() {
           <div>
             <p className="flex justify-between font-semibold">
               <span>Total</span>
-              <span>{PRICE ? money(cart) : `Rs. 599 × ${cart}`}</span>
+              <span>{money(cart)}</span>
             </p>
             <a
               href={whatsappLink(cart)}
